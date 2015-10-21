@@ -32,3 +32,8 @@ var ArticleSchema = new Schema({
 });
 
 mongoose.model('Article', ArticleSchema);
+
+
+module.exports = function(bookshelf) {
+  console.log('articles');
+};

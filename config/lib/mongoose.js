@@ -6,11 +6,14 @@
 var config = require('../config'),
   chalk = require('chalk'),
   path = require('path'),
-  bookshelf = require('bookshelf'),
+  knex = require('knex')(config.postgresql),
+  bookshelf = require('bookshelf')(knex),
   mongoose = require('mongoose');
+
 
 // Load the mongoose models
 module.exports.loadModels = function (callback) {
+
   // Globbing model files
   config.files.server.models.forEach(function (modelPath) {
     require(path.resolve(modelPath));
@@ -38,14 +41,6 @@ module.exports.connect = function (cb) {
     }
   });
 };
-
-function connectMongo(self, cb) {
-
-}
-
-function connectPostgres(self, cb) {
-
-}
 
 module.exports.disconnect = function (cb) {
   mongoose.disconnect(function (err) {

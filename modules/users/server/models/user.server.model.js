@@ -4,6 +4,8 @@
  * Module dependencies.
  */
 var mongoose = require('mongoose'),
+  path = require('path'),
+  bookshelf = require(path.resolve('./config/lib/bookshelf')),
   Schema = mongoose.Schema,
   crypto = require('crypto'),
   validator = require('validator'),
@@ -204,3 +206,32 @@ UserSchema.statics.generateRandomPassphrase = function () {
 };
 
 mongoose.model('User', UserSchema);
+var User = bookshelf.Model.extend({
+  tableName: 'users',
+  hasTimestamps: true,
+  
+  id: {
+    type: 'increments',
+    nullable: false,
+    primary: true
+  },
+  created_at: {
+    type: 'datetime', 
+    nullable: false 
+  },
+  updated_at: {
+    type: 'datetime', 
+    nullable: true 
+  },
+  expense_id: { 
+      type: 'integer',
+      nullable: false,
+      unsinged: true
+  },
+  expense: function() {
+      // many-to-one
+      this.belongsTo(User);
+  }
+});
+
+module.exports = bookshelf.model('User', User);
