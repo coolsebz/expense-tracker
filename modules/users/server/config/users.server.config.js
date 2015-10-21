@@ -4,8 +4,9 @@
  * Module dependencies.
  */
 var passport = require('passport'),
-  User = require('mongoose').model('User'),
   path = require('path'),
+  User = require(path.resolve('./modules/users/server/models/user.server.model')),
+  Users = require(path.resolve('./modules/users/server/collections/user.server.collection')),
   config = require(path.resolve('./config/config'));
 
 /**
@@ -19,10 +20,14 @@ module.exports = function (app, db) {
 
   // Deserialize sessions
   passport.deserializeUser(function (id, done) {
-    User.findOne({
-      _id: id
-    }, '-salt -password', function (err, user) {
-      done(err, user);
+    User.where({
+      id: id
+    }).fetch({ 
+      withRelated: ['expenses']
+    }).then(function(model) {
+      done(null, model);
+    }).catch(function(err) {
+      done(err);
     });
   });
 

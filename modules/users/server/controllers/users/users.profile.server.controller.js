@@ -7,8 +7,8 @@ var _ = require('lodash'),
   fs = require('fs'),
   path = require('path'),
   errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller')),
-  mongoose = require('mongoose'),
-  User = mongoose.model('User');
+  User = require(path.resolve('./modules/users/server/models/user.server.model')),
+  Users = require(path.resolve('./modules/users/server/collections/user.server.collection'));
 
 /**
  * Update user details

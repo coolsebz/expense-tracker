@@ -16,19 +16,24 @@ module.exports = function () {
     passwordField: 'password'
   },
   function (username, password, done) {
-    User.findOne({
-      username: username.toLowerCase()
-    }, function (err, user) {
-      if (err) {
-        return done(err);
-      }
-      if (!user || !user.authenticate(password)) {
+
+    User.where({
+      username: username
+    }).fetch({
+      withRelated: []
+    }).then(function (user) {
+      console.log(user);
+
+       if (!user || !user.authenticate(password)) {
         return done(null, false, {
           message: 'Invalid username or password'
         });
       }
-
-      return done(null, user);
+    
+      done(null, user);
+    }).catch(function(err) {
+      return done(err); 
     });
+
   }));
 };

@@ -23,10 +23,14 @@ var Expense = bookshelf.Model.extend({
     type: 'datetime', 
     nullable: true 
   },
-  user_id: { 
-      type: 'integer',
-      nullable: false,
-      unsinged: true
+  value: {
+    type: 'float',
+    nullable: false
+  },
+  title: {
+    type: 'string',
+    maxlength: 50,
+    nullable: true
   },
   user: function() {
       // many-to-one

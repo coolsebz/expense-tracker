@@ -4,8 +4,8 @@
  * Module dependencies.
  */
 var path = require('path'),
-  mongoose = require('mongoose'),
-  User = mongoose.model('User'),
+  User = require(path.resolve('./modules/users/server/models/user.server.model')),
+  Users = require(path.resolve('./modules/users/server/collections/user.server.collection')),
   errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller'));
 
 /**
@@ -74,11 +74,7 @@ exports.list = function (req, res) {
  * User middleware
  */
 exports.userByID = function (req, res, next, id) {
-  if (!mongoose.Types.ObjectId.isValid(id)) {
-    return res.status(400).send({
-      message: 'User is invalid'
-    });
-  }
+  //todo(seb): when switching to uuid make sure that they key is valid
 
   User.findById(id, '-salt -password').exec(function (err, user) {
     if (err) {

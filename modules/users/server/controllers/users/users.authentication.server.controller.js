@@ -5,9 +5,9 @@
  */
 var path = require('path'),
   errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller')),
-  mongoose = require('mongoose'),
   passport = require('passport'),
-  User = mongoose.model('User');
+  User = require(path.resolve('./modules/users/server/models/user.server.model')),
+  Users = require(path.resolve('./modules/users/server/collections/user.server.collection'));
 
 // URLs for which user can't be redirected on signin
 var noReturnUrls = [
@@ -23,32 +23,37 @@ exports.signup = function (req, res) {
   delete req.body.roles;
 
   // Init Variables
-  var user = new User(req.body);
+  // todo(seb): expand on this using .parse in the model so snake_case and camelCase conversions are done automatically
+  var user = new User({
+    username: req.body.username,
+    email: req.body.email,
+    first_name: req.body.firstName,
+    last_name: req.body.lastName,
+    password: req.body.password,
+    provider: 'local'
+  });
   var message = null;
 
-  // Add missing user fields
-  user.provider = 'local';
-  user.displayName = user.firstName + ' ' + user.lastName;
-
   // Then save the user
-  user.save(function (err) {
-    if (err) {
-      return res.status(400).send({
-        message: errorHandler.getErrorMessage(err)
-      });
-    } else {
-      // Remove sensitive data before login
-      user.password = undefined;
-      user.salt = undefined;
+  user.save().then(function(model) {
+    // Remove sensitive data before login
+    user.password = undefined;
+    user.salt = undefined;
 
-      req.login(user, function (err) {
-        if (err) {
-          res.status(400).send(err);
-        } else {
-          res.json(user);
-        }
-      });
-    }
+    req.login(user, function (err) {
+      if (err) {
+        res.status(400).send(err);
+      } else {
+        res.json(user);
+      }
+    });
+
+  }).catch(function (err) {
+    console.log(err);
+    return res.status(400).send({
+      message: errorHandler.getErrorMessage(err)
+    });
+
   });
 };
 

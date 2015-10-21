@@ -6,8 +6,6 @@
 var config = require('../config'),
   chalk = require('chalk'),
   path = require('path'),
-  knex = require('knex')(config.postgresql),
-  bookshelf = require('bookshelf')(knex),
   mongoose = require('mongoose');
 
 
