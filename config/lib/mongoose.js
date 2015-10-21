@@ -6,6 +6,7 @@
 var config = require('../config'),
   chalk = require('chalk'),
   path = require('path'),
+  bookshelf = require('bookshelf'),
   mongoose = require('mongoose');
 
 // Load the mongoose models
@@ -37,6 +38,14 @@ module.exports.connect = function (cb) {
     }
   });
 };
+
+function connectMongo(self, cb) {
+
+}
+
+function connectPostgres(self, cb) {
+
+}
 
 module.exports.disconnect = function (cb) {
   mongoose.disconnect(function (err) {

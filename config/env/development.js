@@ -12,6 +12,17 @@ module.exports = {
     // Enable mongoose debug mode
     debug: process.env.MONGODB_DEBUG || false
   },
+  postgresql: {
+    client: 'postgresql',
+      connection: {
+        host     : 'localhost',
+        port     : '5432',
+        user     : '',
+        password : '',
+        database : 'expensesapp',
+        charset  : 'UTF8_GENERAL_CI'
+      }
+  },  
   log: {
     // Can specify one of 'combined', 'common', 'dev', 'short', 'tiny'
     format: 'dev',
