@@ -1,0 +1,92 @@
+@import "../../../core/client/scss/partials/variables";
+@import "../../../core/client/scss/partials/mixins";
+@import "../../../core/client/scss/partials/placeholders";
+
+.auth-view {
+	@extend .flex;
+	width: 100vw;
+	height: 100vh;
+	background-color: $light_grey;
+	@extend .box_shadow;
+
+	form {
+		margin: auto;
+		align-content: center;
+		flex-direction: column;
+		background-color: $white;
+		min-width: 300px;
+		padding: 10px 20px;
+		
+		@include rounded_corner(4px);
+		
+		footer {
+			padding: 3px 9px;
+
+			a {
+				color: $blue;
+				margin-left: 6px;
+
+				&:hover, &:visited, &:focus {
+					color: $blue;
+				}
+			}
+		}
+
+		.md-primary {
+			@include material_btn($blue);
+		}
+	}
+}
+
+.auth-errors span {
+	color: rgb(244,67,54);
+	font-size: 12px;
+	font-weight: 300;
+}
+
+.passwords-view {
+	@extend .flex;
+	height: 100vh;
+	width: 100vw;
+	background-color: $light_grey;
+	@extend .box_shadow;
+	
+	> div {
+		margin: auto;
+		align-content: center;
+		flex-direction: column;
+		background-color: $white;
+		min-width: 300px;
+		padding: 10px 20px;
+		
+		@include rounded_corner(4px);
+		
+		h3 {
+			font-size: 14px;
+		}
+
+		p {
+			font-size: 12px;
+		}
+
+		fieldset {
+			padding: 0;
+		}
+
+		footer {
+			a {
+				color: $blue;
+				margin-left: 6px;
+
+				&:hover, &:visited, &:focus {
+					color: $blue;
+				}
+			}
+		}
+
+		.submit-btn {
+			@include material_btn($blue);
+			margin-left: 0;
+		}
+	}
+}

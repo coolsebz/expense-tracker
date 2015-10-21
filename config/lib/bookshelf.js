@@ -27,7 +27,7 @@ var config = require('../config'),
   //   table.string('profile_image_url').nullable();
   //   table.string('provider').notNullable();
   //   table.string('reset_password_token').nullable();
-  //   table.datetime('reset_password_token').nullable();
+  //   table.datetime('reset_password_expires').nullable();
   //   table.timestamps();
   // }).then(function() {
   //    // you now have a users table with a few columns.

@@ -1,36 +1,92 @@
-@media (min-width: 992px) {
-  .nav-users {
-    position: fixed;
-  }
-}
-.social-account-container {
-  display: inline-block;
-  position: relative;
-}
-.btn-remove-account {
-  top: 10px;
-  right: 10px;
-  position: absolute;
-}
-.btn-file {
-  position: relative;
-  overflow: hidden;
-}
-.btn-file input[type=file] {
-  position: absolute;
-  top: 0;
-  right: 0;
-  min-width: 100%;
-  min-height: 100%;
-  font-size: 100px;
-  text-align: right;
-  filter: alpha(opacity=0);
-  opacity: 0;
-  background: white;
-  cursor: inherit;
-  display: block;
-}
-.user-profile-picture {
-  min-height: 150px;
-  max-height: 150px;
-}
+@charset "UTF-8";
+/* Font variables */
+/* Color variables  */
+/* Font variables */
+/* Color variables  */
+/* Font variables */
+/* Color variables  */
+.box_shadow, .auth-view, .passwords-view {
+  box-shadow: 6px 6px 8px -2px #e4e8ed; }
+
+.flex, .auth-view, .passwords-view {
+  display: -webkit-box;
+  /* OLD: Safari,  iOS, Android browser, older WebKit browsers.  */
+  /* OLD: Firefox (buggy) */
+  display: -ms-flexbox;
+  /* MID: IE 10 */
+  display: -webkit-flex;
+  /* NEW, Chrome 21–28, Safari 6.1+ */
+  display: flex;
+  /* NEW: IE11, Chrome 29+, Opera 12.1+, Firefox 22+ */ }
+
+.auth-view {
+  width: 100vw;
+  height: 100vh;
+  background-color: #F3F5F9; }
+  .auth-view form {
+    margin: auto;
+    -webkit-align-content: center;
+        -ms-flex-line-pack: center;
+            align-content: center;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: column;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    background-color: #fff;
+    min-width: 300px;
+    padding: 10px 20px;
+    border-radius: 4px; }
+    .auth-view form footer {
+      padding: 3px 9px; }
+      .auth-view form footer a {
+        color: #4777DB;
+        margin-left: 6px; }
+        .auth-view form footer a:hover, .auth-view form footer a:visited, .auth-view form footer a:focus {
+          color: #4777DB; }
+    .auth-view form .md-primary {
+      color: #fff;
+      background-color: #4777DB !important; }
+      .auth-view form .md-primary:hover, .auth-view form .md-primary:focus, .auth-view form .md-primary:active, .auth-view form .md-primary:visited {
+        background-color: #4777DB !important; }
+
+.auth-errors span {
+  color: #f44336;
+  font-size: 12px;
+  font-weight: 300; }
+
+.passwords-view {
+  height: 100vh;
+  width: 100vw;
+  background-color: #F3F5F9; }
+  .passwords-view > div {
+    margin: auto;
+    -webkit-align-content: center;
+        -ms-flex-line-pack: center;
+            align-content: center;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: column;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    background-color: #fff;
+    min-width: 300px;
+    padding: 10px 20px;
+    border-radius: 4px; }
+    .passwords-view > div h3 {
+      font-size: 14px; }
+    .passwords-view > div p {
+      font-size: 12px; }
+    .passwords-view > div fieldset {
+      padding: 0; }
+    .passwords-view > div footer a {
+      color: #4777DB;
+      margin-left: 6px; }
+      .passwords-view > div footer a:hover, .passwords-view > div footer a:visited, .passwords-view > div footer a:focus {
+        color: #4777DB; }
+    .passwords-view > div .submit-btn {
+      color: #fff;
+      background-color: #4777DB !important;
+      margin-left: 0; }
+      .passwords-view > div .submit-btn:hover, .passwords-view > div .submit-btn:focus, .passwords-view > div .submit-btn:active, .passwords-view > div .submit-btn:visited {
+        background-color: #4777DB !important; }

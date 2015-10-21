@@ -1,0 +1,165 @@
+@import "partials/variables";
+@import "partials/mixins";
+@import "partials/placeholders";
+
+/* Custom web font  */
+@font-face {
+	font-family: 'Effra';
+	src: url('../fonts/Effra/Effra_Std_Bd.eot') format('embedded-opentype');
+	src: url('../fonts/Effra/Effra_Std_Bd.ttf') format('truetype');
+	src: url('../fonts/Effra/Effra_Std_BdIt.eot') format('embedded-opentype');
+	src: url('../fonts/Effra/Effra_Std_BdIt.ttf') format('truetype');
+	src: url('../fonts/Effra/Effra_Std_He.eot') format('embedded-opentype');
+	src: url('../fonts/Effra/Effra_Std_He.ttf') format('truetype');
+	src: url('../fonts/Effra/Effra_Std_HeIt.eot') format('embedded-opentype');
+	src: url('../fonts/Effra/Effra_Std_HeIt.ttf') format('truetype');
+	src: url('../fonts/Effra/Effra_Std_It.eot') format('embedded-opentype');
+	src: url('../fonts/Effra/Effra_Std_It.ttf') format('truetype');
+	src: url('../fonts/Effra/Effra_Std_Lt.eot') format('embedded-opentype');
+	src: url('../fonts/Effra/Effra_Std_Lt.ttf') format('truetype');
+	src: url('../fonts/Effra/Effra_Std_LtIt.eot') format('embedded-opentype');
+	src: url('../fonts/Effra/Effra_Std_LtIt.ttf') format('truetype');
+	src: url('../fonts/Effra/Effra_Std_Md.eot') format('embedded-opentype');
+	src: url('../fonts/Effra/Effra_Std_Md.ttf') format('truetype');
+	src: url('../fonts/Effra/Effra_Std_MdIt.eot') format('embedded-opentype');
+	src: url('../fonts/Effra/Effra_Std_MdIt.ttf') format('truetype');
+	src: url('../fonts/Effra/Effra_Std_Rg.eot') format('embedded-opentype');
+	src: url('../fonts/Effra/Effra_Std_Rg.ttf') format('truetype');
+}
+
+/* html {
+	font-size: 62.5%;
+} */
+
+body * {
+	box-sizing: border-box;
+}
+
+body, input {
+	font-family: $font_primary;
+}
+
+fieldset {
+	border: none;
+}
+
+md-input-container {
+	padding: 0;
+}
+
+md-input-container [ng-messages] {
+	min-height: auto;
+}
+
+h1, h2, h3, h4, h5, h6, p {
+	margin: 0;
+}
+
+.small-input-group {
+	&.md-input-has-placeholder {
+		input {
+			@include apply_placeholders;
+		}
+
+		textarea {
+			@include apply_placeholders;
+		}
+	}
+
+	label {
+		color: $darker_blue;
+		@include font_size(1.5);
+		font-weight: 500;
+	}
+
+	input, textarea {
+		@include font_size(1.3);
+		@include apply_placeholders('alt');
+		color: $grey;
+		font-weight: 500;
+	}
+}
+
+.medium-input-group {
+	&.md-input-has-placeholder {
+		input {
+			@include apply_placeholders;
+		}
+
+		textarea {
+			@include apply_placeholders;
+		}
+	}
+
+	label {
+		color: $darker_blue;
+		@include font_size(1.25);
+		font-weight: 500;
+	}
+
+	input, textarea {
+		@include font_size(1.75);
+		@include apply_placeholders('alt');
+		color: $grey;
+		font-weight: 500;
+	}
+}
+
+// todo(bianca): move this to placeholders
+%material-bg-btn {
+	@include font_size(1.25);
+	padding: 0 30px;
+}
+
+.blue-bg-btn {
+	@include material_btn($blue);
+	@extend %material-bg-btn;
+}
+
+.dark-bg-btn {
+	@include material_btn($dark_blue);
+	@extend %material-bg-btn;
+}
+
+.orange-bg-btn {
+	@include material_btn($light_orange);
+	@extend %material-bg-btn;
+}
+
+.red-bg-btn {
+	@include material_btn($red);
+	@extend %material-bg-btn;
+}
+
+.transparent-btn {
+	@include material_btn;
+	@include font_size(1.1);
+	margin-left: 15px;
+}
+
+.link-btn {
+	@include material_btn(transparent);
+	@include font_size(1.1);
+	text-decoration: underline;
+
+	&.white {
+		color: $white;		
+	}
+
+	&:hover, &:active, &:focus {
+		text-decoration: underline;
+	}
+}
+
+.alert-error-message {
+	order: 3;
+	@include font_size(1.0);
+	color: $red;
+	margin-top: 3px;
+}
+
+.user-image {
+	border-radius: 50%;
+	width: 30px;
+	height: 30px;
+}

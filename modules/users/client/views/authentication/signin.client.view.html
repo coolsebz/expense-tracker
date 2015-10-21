@@ -1,34 +1,41 @@
-<div ng-controller="AuthenticationController">
-  <h3 class="col-md-12 text-center">Or with your account</h3>
-  <div class="col-xs-offset-2 col-xs-8 col-md-offset-4 col-md-4">
+<section ng-controller="AuthenticationController" class="auth-view">
     <form name="userForm" ng-submit="signin(userForm.$valid)" class="signin" novalidate autocomplete="off">
       <fieldset>
-        <div class="form-group" show-errors>
-          <label for="username">Username</label>
-          <input type="text" id="username" name="username" class="form-control" ng-model="credentials.username" placeholder="Username" lowercase required>
-          <div ng-messages="userForm.username.$error" role="alert">
-            <p class="help-block error-text" ng-message="required">Username is required.</p>
+        <!-- Workaround for Chrome autocomplete -->
+        <div style="display:none">
+          <input type="text">
+          <input type="password">
+        </div>
+
+        <md-input-container>
+          <label>Username</label>
+          <input required name="username" ng-model="credentials.username" autocomplete="off">
+          <div ng-messages="userForm.username.$error" ng-show="userForm.username.$dirty || invalid">
+            <div ng-message="required">Username is required.</div>
           </div>
-        </div>
-        <div class="form-group" show-errors>
-          <label for="password">Password</label>
-          <input type="password" id="password" name="password" class="form-control" ng-model="credentials.password" placeholder="Password" required>
-          <div ng-messages="userForm.password.$error" role="alert">
-            <p class="help-block error-text" ng-message="required">Password is required.</p>
+        </md-input-container>
+
+        <md-input-container>
+          <label>Password</label>
+          <input required type="password" name="password" ng-model="credentials.password" autocomplete="off">
+          <div ng-messages="userForm.password.$error" ng-show="userForm.password.$dirty || invalid">
+            <div ng-message="required">Password is required.</div>
           </div>
-        </div>
-        <div class="text-center form-group">
-          <button type="submit" class="btn btn-primary">Sign in</button>
-          &nbsp; or&nbsp;
-          <a ui-sref="authentication.signup">Sign up</a>
-        </div>
-        <div class="text-center forgot-password">
-          <a ui-sref="password.forgot">Forgot your password?</a>
-        </div>
-        <alert type="danger" ng-show="error" class="text-center text-danger">
+        </md-input-container>
+
+        <alert type="danger" ng-show="error" class="auth-errors">
           <span ng-bind="error"></span>
         </alert>
       </fieldset>
+      
+      <footer>
+          <md-button type="submit" class="md-primary"> Log in </md-button>
+                &nbsp; or&nbsp;
+          <a ui-sref="authentication.signup" class="show-signup">REGISTER</a>
+
+          <div class="text-center forgot-password">
+            <a ui-sref="password.forgot">Forgot your password?</a>
+          </div>
+      </footer>
     </form>
-  </div>
-</div>
+</section>
