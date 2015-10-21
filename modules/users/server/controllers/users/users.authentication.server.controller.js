@@ -35,7 +35,9 @@ exports.signup = function (req, res) {
   var message = null;
 
   // Then save the user
-  user.save().then(function(model) {
+  user.save({
+    profile_image_url: 'modules/users/client/img/profile/default.png'
+  }).then(function(model) {
     // Remove sensitive data before login
     user.password = undefined;
     user.salt = undefined;

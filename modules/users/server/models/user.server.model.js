@@ -84,9 +84,7 @@ var User = bookshelf.Model.extend({
     //     type: 'string',
     //     nullable: false
     // },
-    expenses: function(){
-      return this.hasMany('Expense');
-    },
+
     /* For the reset password token */
     // reset_password_token: {
     //     type: 'string',
@@ -96,6 +94,10 @@ var User = bookshelf.Model.extend({
     //     type: 'datetime',
     //     nullable: true
     // },
+    
+    expenses: function(){
+      return this.hasMany('Expense');
+    },
 
     // class like functions
     beforeSave: function(userModel, newUserModel, options) {
