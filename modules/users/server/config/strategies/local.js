@@ -31,7 +31,6 @@ module.exports = function () {
     
       done(null, user);
     }).catch(function(err) {
-      console.log(err);
       return done(err); 
     });
 
