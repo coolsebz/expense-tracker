@@ -27,28 +27,12 @@
 	src: url('../fonts/Effra/Effra_Std_Rg.ttf') format('truetype');
 }
 
-/* html {
-	font-size: 62.5%;
-} */
-
 body * {
 	box-sizing: border-box;
 }
 
 body, input {
 	font-family: $font_primary;
-}
-
-fieldset {
-	border: none;
-}
-
-md-input-container {
-	padding: 0;
-}
-
-md-input-container [ng-messages] {
-	min-height: auto;
 }
 
 h1, h2, h3, h4, h5, h6, p {
@@ -63,48 +47,6 @@ h1, h2, h3, h4, h5, h6, p {
 .blue-bg-btn {
 	@include material_btn($blue);
 	@extend %material-bg-btn;
-}
-
-.dark-bg-btn {
-	@include material_btn($dark_blue);
-	@extend %material-bg-btn;
-}
-
-.orange-bg-btn {
-	@include material_btn($light_orange);
-	@extend %material-bg-btn;
-}
-
-.red-bg-btn {
-	@include material_btn($red);
-	@extend %material-bg-btn;
-}
-
-.transparent-btn {
-	@include material_btn;
-	@include font_size(1.1);
-	margin-left: 15px;
-}
-
-.link-btn {
-	@include material_btn(transparent);
-	@include font_size(1.1);
-	text-decoration: underline;
-
-	&.white {
-		color: $white;		
-	}
-
-	&:hover, &:active, &:focus {
-		text-decoration: underline;
-	}
-}
-
-.alert-error-message {
-	order: 3;
-	@include font_size(1.0);
-	color: $red;
-	margin-top: 3px;
 }
 
 .menu-bar {

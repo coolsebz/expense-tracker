@@ -43,28 +43,16 @@
   src: url("../fonts/Effra/Effra_Std_Rg.eot") format("embedded-opentype");
   src: url("../fonts/Effra/Effra_Std_Rg.ttf") format("truetype"); }
 
-/* html {
-	font-size: 62.5%;
-} */
 body * {
   box-sizing: border-box; }
 
 body, input {
   font-family: "Effra", sans-serif; }
 
-fieldset {
-  border: none; }
-
-md-input-container {
-  padding: 0; }
-
-md-input-container [ng-messages] {
-  min-height: auto; }
-
 h1, h2, h3, h4, h5, h6, p {
   margin: 0; }
 
-.blue-bg-btn, .dark-bg-btn, .orange-bg-btn, .red-bg-btn {
+.blue-bg-btn {
   font-size: 12.5px;
   padding: 0 30px; }
 
@@ -73,55 +61,6 @@ h1, h2, h3, h4, h5, h6, p {
   background-color: #4777DB !important; }
   .blue-bg-btn:hover, .blue-bg-btn:focus, .blue-bg-btn:active, .blue-bg-btn:visited {
     background-color: #4777DB !important; }
-
-.dark-bg-btn {
-  color: #fff;
-  background-color: #1d2029 !important; }
-  .dark-bg-btn:hover, .dark-bg-btn:focus, .dark-bg-btn:active, .dark-bg-btn:visited {
-    background-color: #1d2029 !important; }
-
-.orange-bg-btn {
-  color: #fff;
-  background-color: #efc75e !important; }
-  .orange-bg-btn:hover, .orange-bg-btn:focus, .orange-bg-btn:active, .orange-bg-btn:visited {
-    background-color: #efc75e !important; }
-
-.red-bg-btn {
-  color: #fff;
-  background-color: #f07575 !important; }
-  .red-bg-btn:hover, .red-bg-btn:focus, .red-bg-btn:active, .red-bg-btn:visited {
-    background-color: #f07575 !important; }
-
-.transparent-btn {
-  background-color: transparent;
-  color: #92969c;
-  border-radius: 20px;
-  border: 1px solid #72c8fa;
-  font-size: 11px;
-  margin-left: 15px; }
-  .transparent-btn:hover, .transparent-btn:focus, .transparent-btn:active, .transparent-btn:visited {
-    background-color: transparent; }
-
-.link-btn {
-  color: #fff;
-  background-color: transparent !important;
-  font-size: 11px;
-  text-decoration: underline; }
-  .link-btn:hover, .link-btn:focus, .link-btn:active, .link-btn:visited {
-    background-color: transparent !important; }
-  .link-btn.white {
-    color: #fff; }
-  .link-btn:hover, .link-btn:active, .link-btn:focus {
-    text-decoration: underline; }
-
-.alert-error-message {
-  -webkit-box-ordinal-group: 4;
-  -webkit-order: 3;
-      -ms-flex-order: 3;
-          order: 3;
-  font-size: 10px;
-  color: #f07575;
-  margin-top: 3px; }
 
 .menu-bar {
   position: fixed;

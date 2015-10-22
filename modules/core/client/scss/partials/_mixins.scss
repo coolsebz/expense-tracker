@@ -29,33 +29,3 @@
 @mixin font_size($sizeValue: 1.6) {
   font-size: ($sizeValue * 10) + px;
 }
-
-@mixin placeholder_style ($style:false) {
-	font-weight: 500;
-	// main styles used by default
-	@if (not $style) or ($style == 'main') {
-		color: $grey;
-	}
-
-	// alternative style
-	@if $style == 'alt' {
-		color: $darker_blue;
-	}
-
-	@if $style == 'white' {
-		color: $white;
-	}
-}
-
-@mixin apply_placeholders ($style:false) {
-	&::-webkit-input-placeholder {
-		@include placeholder_style($style);
-	}
-
-	&:-moz-placeholder {
-		@include placeholder_style($style);
-	}
-	&.placeholder {
-		@include placeholder_style($style);
-	}
-}

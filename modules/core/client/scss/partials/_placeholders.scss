@@ -1,11 +1,5 @@
 @import "mixins";
 
-.box_shadow {
-	-webkit-box-shadow: 6px 6px 8px -2px rgba(228,232,237,1);
-	-moz-box-shadow: 6px 6px 8px -2px rgba(228,232,237,1);
-	box-shadow: 6px 6px 8px -2px rgba(228,232,237,1);
-}
-
 .flex {
 	display: -webkit-box;   /* OLD: Safari,  iOS, Android browser, older WebKit browsers.  */
 	display: -moz-box;      /* OLD: Firefox (buggy) */
