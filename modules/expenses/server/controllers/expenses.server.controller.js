@@ -44,7 +44,7 @@ exports.update = function(req, res) {
     res.json(savedExpense);
   }).catch(function(err) {
     return res.status(400).send({
-      message: errorhandler.getErrorMessage(err)
+      message: errorHandler.getErrorMessage(err)
     });
   });
 
@@ -57,13 +57,13 @@ exports.delete = function(req, res) {
     res.json(deletedExpense);
   }).catch(function(err) {
     return res.status(400).send({
-      message: errorhandler.getErrorMessage(err)
+      message: errorHandler.getErrorMessage(err)
     });
   });
 };
 
 exports.list = function(req, res) {
-  new Expenses.query({ 
+  Expenses.query({ 
     where: {
       user_id: req.user.id
     }
