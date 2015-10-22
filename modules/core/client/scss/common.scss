@@ -106,3 +106,24 @@ h1, h2, h3, h4, h5, h6, p {
 	color: $red;
 	margin-top: 3px;
 }
+
+.menu-bar {
+	position: fixed;
+	align-items: center;
+	justify-content: space-around;
+
+	div {
+		font-weight: bolder;
+		cursor: pointer;
+		font-size: 1rem;
+
+		&:hover {
+			color: $black;
+		}
+	}
+
+	.md-fab {
+		font-size: 2rem;
+		background-color: $light_blue;
+	}
+}

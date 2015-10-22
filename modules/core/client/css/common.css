@@ -122,3 +122,22 @@ h1, h2, h3, h4, h5, h6, p {
   font-size: 10px;
   color: #f07575;
   margin-top: 3px; }
+
+.menu-bar {
+  position: fixed;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-justify-content: space-around;
+      -ms-flex-pack: distribute;
+          justify-content: space-around; }
+  .menu-bar div {
+    font-weight: bolder;
+    cursor: pointer;
+    font-size: 1rem; }
+    .menu-bar div:hover {
+      color: #252525; }
+  .menu-bar .md-fab {
+    font-size: 2rem;
+    background-color: #72c8fa; }

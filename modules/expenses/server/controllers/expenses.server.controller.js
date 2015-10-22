@@ -26,9 +26,10 @@ exports.create = function(req, res) {
       req.user.attributes.balance += expense.attributes.amount;
     }
 
-    req.user.save({ patch: true }).then(function(savedUser) {
+    req.user.save(null, { method: 'update' }).then(function(savedUser) {
       res.json(savedExpense);
     }).catch(function(err) {
+      console.log('user save: ', err);
       return res.status(400).send({
         err: err,
         message: errorHandler.getErrorMessage(err)
@@ -59,7 +60,7 @@ exports.update = function(req, res) {
 
   //note(seb): setting the method explicitly to 'update' makes it so that if it fails we get a different,
   //           more accurate error message back than just 'no rows updated'
-  expense.save({ method: 'update' }).then(function(savedExpense) {
+  expense.save(null, { method: 'update' }).then(function(savedExpense) {
     res.json(savedExpense);
   }).catch(function(err) {
     return res.status(400).send({
@@ -82,6 +83,11 @@ exports.delete = function(req, res) {
 };
 
 exports.list = function(req, res) {
+
+  if(!req.user) {
+    return [];
+  }
+
   Expenses.query({ 
     where: {
       user_id: req.user.attributes.id

@@ -20,7 +20,6 @@
   /* NEW: IE11, Chrome 29+, Opera 12.1+, Firefox 22+ */ }
 
 .full-view {
-  width: 100vw;
   height: 100vh;
   -webkit-align-content: center;
       -ms-flex-line-pack: center;

@@ -1,3 +1,9 @@
-<section ng-controller="HomeController">
-  <!-- Add generic homepage code here -->
+<section ng-controller="HomeController" flex layout="column" layout-aligm="center center" class="full-view">
+  
+  <article>
+  	<h1>Some stats about your expenses:</h1>
+  	<canvas id="line" class="chart chart-line" chart-data="data" chart-labels="labels" 
+  	    chart-legend="true" chart-series="series" chart-click="onClick"></canvas> 
+  	
+  </article>
 </section>

@@ -8,6 +8,7 @@ module.exports = {
         // 'public/lib/bootstrap/dist/css/bootstrap-theme.css'
         'public/lib/normalize-css/normalize.css',
         'public/lib/angular-material/angular-material.css',
+        'public/lib/angular-chart.js/dist/angular-chart.css',
       ],
       js: [
         'public/lib/angular/angular.js',
@@ -21,6 +22,8 @@ module.exports = {
         'public/lib/owasp-password-strength-test/owasp-password-strength-test.js',
         'public/lib/angular-aria/angular-aria.min.js',
         'public/lib/angular-material/angular-material.min.js',
+        'public/lib/Chart.js/Chart.min.js',
+        'public/lib/angular-chart.js/dist/angular-chart.min.js',
       ],
       tests: ['public/lib/angular-mocks/angular-mocks.js']
     },

@@ -5,6 +5,10 @@ angular.module('expenses').controller('ExpensesController', ['$scope', '$statePa
   function ($scope, $stateParams, $location, $state, Authentication, Expenses) {
     $scope.authentication = Authentication;
 
+    if(!$scope.authentication.user) {
+      $state.go('authentication.signin');
+    }
+
     //cleaning up before the new expense is created
     $scope.prepareNewExpense = function() {
       $scope.title = '';
@@ -34,6 +38,15 @@ angular.module('expenses').controller('ExpensesController', ['$scope', '$statePa
         // Clear form fields
         $scope.title = '';
         $scope.amount = 0;
+
+        if(response.type === 'expense') {
+          $scope.authentication.user.balance -= response.amount;
+        }
+        else if(response.type === 'income') {
+          $scope.authentication.user.balance += response.amount;
+        }
+
+        $scope.authentication.user.expenses.push(response);
       }, function (errorResponse) {
         $scope.error = errorResponse.data.message;
       });
