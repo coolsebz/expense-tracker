@@ -100,7 +100,15 @@ var User = bookshelf.Model.extend({
     // },
     
     expenses: function(){
+      // one-to-many
       return this.hasMany('Expense');
+    },
+    shared_expenses: function() {
+      return this.belongsToMany('Expense', 'users_expenses', 'user_id');
+    },
+    categories: function() {
+      // one-to-many
+      return this.hasMany('Category');
     },
 
     // class like functions
