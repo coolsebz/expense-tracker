@@ -5,8 +5,9 @@ var path = require('path'),
   User = require(path.resolve('./modules/users/server/models/user.server.model')),
   Users = require(path.resolve('./modules/users/server/collections/user.server.collection')),
   Expense = require(path.resolve('./modules/expenses/server/models/expense.server.model')),
-  Category = require(path.resolve('./modules/categories/server/models/category.server.model')),
   Expenses = require(path.resolve('./modules/expenses/server/collections/expense.server.collection')),
+  Category = require(path.resolve('./modules/categories/server/models/category.server.model')),
+  Categories = require(path.resolve('./modules/categories/server/collections/category.server.collection')),
   errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller'));
 
 /*
@@ -17,24 +18,8 @@ exports.create = function(req, res) {
 
 	expense.attributes.user_id = req.user.attributes.id;
 
-  if(!req.body.category_id) {
-
-    // check if user has the 'uncathergorized' category
-    
-
-
-    // if they don't, create it
-
-    // attach it to the expense 
-  }
-  else {
-    expense.attributes.category_id = req.body.category_id;
-  }
-
-
-
 	expense.save().then(function(savedExpense) {
-		
+    savedExpense.shared_users().attach(req.user.attributes.id);
 
     if(expense.attributes.type === 'expense') {
       req.user.attributes.balance -= expense.attributes.amount;
@@ -124,7 +109,9 @@ exports.list = function(req, res) {
 exports.expenseById = function(req, res, next, id) {
 
   new Expense({ id: id })
-    .fetch()
+    .fetch({
+      withRelated: ['category', 'user', 'shared_users']
+    })
     .then(function(loadedExpense) {
 
       if(!loadedExpense) {

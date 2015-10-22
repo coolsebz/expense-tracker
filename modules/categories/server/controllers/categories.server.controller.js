@@ -2,9 +2,10 @@
 
 var path = require('path'),
   lodash = require('lodash'),
+  bookshelf = require(path.resolve('./config/lib/bookshelf')),
   User = require(path.resolve('./modules/users/server/models/user.server.model')),
   Users = require(path.resolve('./modules/users/server/collections/user.server.collection')),
-  Category = require(path.resolve('./modules/categories/server/models/category.server.model')),
+  Category = bookshelf.model('Category'),
   Categories = require(path.resolve('./modules/categories/server/collections/category.server.collection')),
   errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller'));
 
@@ -51,9 +52,9 @@ exports.update = function(req, res) {
 };
 
 exports.delete = function(req, res) {
-  var cateogyr = req.cateogyr;
+  var category = req.category;
 
-  cateogyr.destroy().then(function(deletedCategory) {
+  category.destroy().then(function(deletedCategory) {
     res.json(deletedCategory);
   }).catch(function(err) {
     return res.status(400).send({
@@ -85,12 +86,12 @@ exports.list = function(req, res) {
 };
 
 exports.categoryById = function(req, res, next, id) {
-
   new Category({ id: id })
-    .fetch({
-      withRelated: ['expense']
-    })
+    .fetch()
     .then(function(loadedCategory) {
+
+      
+
       if(!loadedCategory) {
         return res.status(404).send({
           message: 'No article with that identifier has been found'

@@ -4,7 +4,7 @@ var path      = require('path'),
     bookshelf = require(path.resolve('./config/lib/bookshelf'));
 
 
-// require(path.resolve('./modules/users/server/models/user.server.model.js'));
+require(path.resolve('./modules/categories/server/models/category.server.model.js'));
 
 var Categories = bookshelf.Collection.extend({
 	model: bookshelf.model('Category')

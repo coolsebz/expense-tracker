@@ -32,13 +32,13 @@ var Category = bookshelf.Model.extend({
   //   type: 'string',
   //   nullable: false
   // },
-  expense: function() {
+  expenses: function() {
       // many-to-one
-      this.hasMany('Expense');
+    return this.hasMany('Expense', 'category_id');
   },
   user: function() {
     // many-to-one
-    this.belongsTo('User');
+    return this.belongsTo('User', 'user_id');
   }
 
 });

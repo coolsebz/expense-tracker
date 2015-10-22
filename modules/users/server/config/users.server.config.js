@@ -22,7 +22,7 @@ module.exports = function (app, db) {
   passport.deserializeUser(function (id, done) {
     User.where({
       id: id
-    }).fetch({ 
+    }).fetch({
       withRelated: ['expenses', 'categories', 'shared_expenses']
     }).then(function(model) {
       done(null, model);

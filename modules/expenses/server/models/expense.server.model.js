@@ -43,15 +43,15 @@ var Expense = bookshelf.Model.extend({
   // },
   category: function() {
     // many-to-one
-    this.belongsTo('Category');
+    return this.belongsTo('Category');
   },
   user: function() {
       // many-to-one
-      this.belongsTo('User');
+    return this.belongsTo('User');
   },
   shared_users: function() {
     // many-to-many with a bridge table 'users_expenses'
-    this.belongsToMany('User', 'users_expenses', 'expense_id');
+    return this.belongsToMany('User', 'users_expenses', 'expense_id');
   }
 });
 
