@@ -33,7 +33,6 @@ angular.module('expenses').controller('ExpensesController', ['$scope', '$statePa
 
       // Redirect after save
       expense.$save(function (response) {
-        console.log(response);
         $state.go('expenses.list');
         // $location.path('expenses/' + response._id);
 

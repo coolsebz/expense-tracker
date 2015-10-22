@@ -48,9 +48,6 @@ angular.module('core').controller('HomeController', ['$scope', 'Authentication',
     		dateLabels[key].expense += expenses[i].type === 'expense' ? expenses[i].amount : 0;    		
     	}
 
-    	console.log(dateLabels);
-
-
     	//step 2, reduce:
     	for (var j = 0; j < Object.keys(dateLabels).length; j++) {
     		incomeSeries.push(dateLabels[Object.keys(dateLabels)[j]].income);
