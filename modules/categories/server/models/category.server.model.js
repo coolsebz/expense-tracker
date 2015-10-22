@@ -5,6 +5,7 @@ var path      = require('path'),
 
 
 require(path.resolve('./modules/expenses/server/models/expense.server.model.js'));
+require(path.resolve('./modules/users/server/models/user.server.model.js'));
 
 var Category = bookshelf.Model.extend({
   tableName: 'categories',

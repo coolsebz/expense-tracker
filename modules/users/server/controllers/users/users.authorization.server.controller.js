@@ -17,8 +17,10 @@ exports.userByID = function (req, res, next, id) {
   User.where({
     id: id
   }).fetch({
-    withRelated: ['expenses']
+    withRelated: ['categories', 'expenses', 'shared_expenses']
   }).then(function (user) {
+    console.log(user);
+
     console.log(user);
 
      if (!user) {

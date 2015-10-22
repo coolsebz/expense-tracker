@@ -20,7 +20,7 @@ module.exports = function () {
     User.where({
       username: username
     }).fetch({
-      withRelated: []
+      withRelated: ['expenses', 'categories', 'shared_expenses']
     }).then(function (user) {
 
        if (!user || !user.authenticate(password)) {

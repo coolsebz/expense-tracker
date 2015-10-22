@@ -5,9 +5,6 @@
 /* Color variables  */
 /* Font variables */
 /* Color variables  */
-.box_shadow {
-  box-shadow: 6px 6px 8px -2px #e4e8ed; }
-
 .flex {
   display: -webkit-box;
   /* OLD: Safari,  iOS, Android browser, older WebKit browsers.  */

@@ -23,18 +23,19 @@
     </md-switch>
 
     <md-input-container>
-      <label>Category</label>
-      <md-select name="category" ng-model="category" required>
-        <md-option value="food">Food</md-option>
-        <md-option value="utilities">Utilities</md-option>
-        <md-option value="medical">Medical</md-option>
-        <md-option value="car-fixes">Car fixes</md-option>
-        <md-option value="misc">Miscellaneous</md-option>
+      <label>Pick a category</label>
+      <md-select name="category" ng-model="category">
+        <md-option ng-repeat="category in authentication.user.categories" value="{{category.id}}">{{category.name}}</md-option>
       </md-select>
-      <div class="errors" ng-messages="expenseForm.category.$error" ng-if="expenseForm.$dirty">
-        <div ng-message="required">Required</div>
-      </div>
     </md-input-container>
+
+    or
+
+    <md-input-container>
+      <label>Type a new category name here</label>
+      <input ng-model="newCategory" type="text">
+    </md-input-container>
+
 
     <md-button class="blue-bg-btn" type="submit">Save</md-button>
   </form>

@@ -1,8 +1,8 @@
 'use strict';
 
 // Expenses controller
-angular.module('expenses').controller('ExpensesController', ['$scope', '$stateParams', '$location', '$state', 'Authentication', 'Expenses',
-  function ($scope, $stateParams, $location, $state, Authentication, Expenses) {
+angular.module('expenses').controller('ExpensesController', ['$scope', '$stateParams', '$location', '$state', 'Authentication', 'Expenses', 'Categories',
+  function ($scope, $stateParams, $location, $state, Authentication, Expenses, Categories) {
     $scope.authentication = Authentication;
 
     if(!$scope.authentication.user) {
@@ -22,40 +22,71 @@ angular.module('expenses').controller('ExpensesController', ['$scope', '$statePa
     $scope.create = function (isValid) {
       $scope.error = null;
 
-      // Create new expense object
-      var expense = new Expenses({
-        title: $scope.title,
-        amount: $scope.amount,
-        receipt_date: $scope.receiptDate,
-        type: $scope.type ? 'income' : 'expense',
-        category: $scope.category
+      console.log($scope.category);
+
+      handleNewCategory($scope.newCategory, function(savedCategory) {
+
+        // Create new expense object
+        var expense = new Expenses({
+          title: $scope.title,
+          amount: $scope.amount,
+          receipt_date: $scope.receiptDate,
+          type: $scope.type ? 'income' : 'expense',
+          category_id: savedCategory.id || $scope.category
+        });
+
+        // Redirect after save
+        expense.$save(function (response) {
+          $state.go('expenses.list');
+          // $location.path('expenses/' + response._id);
+
+          // Clear form fields
+          $scope.title = '';
+          $scope.amount = 0;
+
+          if(response.type === 'expense') {
+            $scope.authentication.user.balance -= response.amount;
+          }
+          else if(response.type === 'income') {
+            $scope.authentication.user.balance += response.amount;
+          }
+
+          if(!$scope.authentication.user.expenses) {
+            $scope.authentication.user.expenses = [];
+          }
+          
+          $scope.authentication.user.expenses.push(response);
+        }, function (errorResponse) {
+          $scope.error = errorResponse.data.message;
+        });
+
       });
 
-      // Redirect after save
-      expense.$save(function (response) {
-        $state.go('expenses.list');
-        // $location.path('expenses/' + response._id);
-
-        // Clear form fields
-        $scope.title = '';
-        $scope.amount = 0;
-
-        if(response.type === 'expense') {
-          $scope.authentication.user.balance -= response.amount;
-        }
-        else if(response.type === 'income') {
-          $scope.authentication.user.balance += response.amount;
-        }
-
-        if(!$scope.authentication.user.expenses) {
-          $scope.authentication.user.expenses = [];
-        }
-        
-        $scope.authentication.user.expenses.push(response);
-      }, function (errorResponse) {
-        $scope.error = errorResponse.data.message;
-      });
+      
     };
+
+    function handleNewCategory(newCategoryName, next) {
+
+      if(!newCategoryName) {
+        return next({});
+      }
+
+      var category = new Categories({
+        name: newCategoryName
+      });
+
+      category.$save(function(response) {
+
+        //add category to user
+
+        next(response);
+      }, function(errorResponse) {
+        $scope.error = errorResponse.data.message;
+
+        //todo(seb): add more error handling here
+        next({});
+      });
+    }
 
     // Remove existing expense
     $scope.remove = function (expense) {

@@ -23,7 +23,7 @@ module.exports = function (app, db) {
     User.where({
       id: id
     }).fetch({ 
-      withRelated: ['expenses']
+      withRelated: ['expenses', 'categories', 'shared_expenses']
     }).then(function(model) {
       done(null, model);
     }).catch(function(err) {

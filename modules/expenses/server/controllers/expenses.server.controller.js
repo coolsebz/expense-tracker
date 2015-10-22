@@ -1,12 +1,13 @@
 'use strict';
 
 var path = require('path'),
+  lodash = require('lodash'),
   User = require(path.resolve('./modules/users/server/models/user.server.model')),
   Users = require(path.resolve('./modules/users/server/collections/user.server.collection')),
   Expense = require(path.resolve('./modules/expenses/server/models/expense.server.model')),
+  Category = require(path.resolve('./modules/categories/server/models/category.server.model')),
   Expenses = require(path.resolve('./modules/expenses/server/collections/expense.server.collection')),
   errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller'));
-
 
 /*
  * Create a new expense
@@ -15,6 +16,22 @@ exports.create = function(req, res) {
 	var expense = new Expense(req.body);
 
 	expense.attributes.user_id = req.user.attributes.id;
+
+  if(!req.body.category_id) {
+
+    // check if user has the 'uncathergorized' category
+    
+
+
+    // if they don't, create it
+
+    // attach it to the expense 
+  }
+  else {
+    expense.attributes.category_id = req.body.category_id;
+  }
+
+
 
 	expense.save().then(function(savedExpense) {
 		
@@ -109,6 +126,7 @@ exports.expenseById = function(req, res, next, id) {
   new Expense({ id: id })
     .fetch()
     .then(function(loadedExpense) {
+
       if(!loadedExpense) {
         return res.status(404).send({
           message: 'No article with that identifier has been found'
