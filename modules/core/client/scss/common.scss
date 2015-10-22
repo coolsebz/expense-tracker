@@ -55,57 +55,6 @@ h1, h2, h3, h4, h5, h6, p {
 	margin: 0;
 }
 
-.small-input-group {
-	&.md-input-has-placeholder {
-		input {
-			@include apply_placeholders;
-		}
-
-		textarea {
-			@include apply_placeholders;
-		}
-	}
-
-	label {
-		color: $darker_blue;
-		@include font_size(1.5);
-		font-weight: 500;
-	}
-
-	input, textarea {
-		@include font_size(1.3);
-		@include apply_placeholders('alt');
-		color: $grey;
-		font-weight: 500;
-	}
-}
-
-.medium-input-group {
-	&.md-input-has-placeholder {
-		input {
-			@include apply_placeholders;
-		}
-
-		textarea {
-			@include apply_placeholders;
-		}
-	}
-
-	label {
-		color: $darker_blue;
-		@include font_size(1.25);
-		font-weight: 500;
-	}
-
-	input, textarea {
-		@include font_size(1.75);
-		@include apply_placeholders('alt');
-		color: $grey;
-		font-weight: 500;
-	}
-}
-
-// todo(bianca): move this to placeholders
 %material-bg-btn {
 	@include font_size(1.25);
 	padding: 0 30px;
@@ -156,10 +105,4 @@ h1, h2, h3, h4, h5, h6, p {
 	@include font_size(1.0);
 	color: $red;
 	margin-top: 3px;
-}
-
-.user-image {
-	border-radius: 50%;
-	width: 30px;
-	height: 30px;
 }

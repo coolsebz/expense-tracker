@@ -84,6 +84,10 @@ var User = bookshelf.Model.extend({
     //     type: 'string',
     //     nullable: false
     // },
+    // balance: {
+    //   type: 'float',
+    //   nullable: 'false'
+    // }
 
     /* For the reset password token */
     // reset_password_token: {

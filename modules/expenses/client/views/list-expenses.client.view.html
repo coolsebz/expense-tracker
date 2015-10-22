@@ -1,0 +1,15 @@
+<section ng-controller="ExpensesController" ng-init="find()" flex layout="row" layout-aligm="end end" class="full-view">
+
+<div>
+  <h1>Here are your expenses</h1>
+
+  <md-card class="expense-card" ng-repeat="expense in expenses">
+
+    <h2 ng-class="{ 'charm-expense': (expense.type === 'expense'), 'charm-income': (expense.type === 'income') }">{{expense.title}}</h2>
+    <h3>Amount: {{expense.amount | currency: '€'}}</h3>
+    <h3>From: {{expense.receipt_date | date: 'longDate'}}</h3>
+
+  </md-card>
+</div>
+
+</section>

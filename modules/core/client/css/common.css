@@ -64,92 +64,6 @@ md-input-container [ng-messages] {
 h1, h2, h3, h4, h5, h6, p {
   margin: 0; }
 
-.small-input-group.md-input-has-placeholder input::-webkit-input-placeholder {
-  font-weight: 500;
-  color: #92969c; }
-
-.small-input-group.md-input-has-placeholder input:-moz-placeholder {
-  font-weight: 500;
-  color: #92969c; }
-
-.small-input-group.md-input-has-placeholder input.placeholder {
-  font-weight: 500;
-  color: #92969c; }
-
-.small-input-group.md-input-has-placeholder textarea::-webkit-input-placeholder {
-  font-weight: 500;
-  color: #92969c; }
-
-.small-input-group.md-input-has-placeholder textarea:-moz-placeholder {
-  font-weight: 500;
-  color: #92969c; }
-
-.small-input-group.md-input-has-placeholder textarea.placeholder {
-  font-weight: 500;
-  color: #92969c; }
-
-.small-input-group label {
-  color: #4d5a6d;
-  font-size: 15px;
-  font-weight: 500; }
-
-.small-input-group input, .small-input-group textarea {
-  font-size: 13px;
-  color: #92969c;
-  font-weight: 500; }
-  .small-input-group input::-webkit-input-placeholder, .small-input-group textarea::-webkit-input-placeholder {
-    font-weight: 500;
-    color: #4d5a6d; }
-  .small-input-group input:-moz-placeholder, .small-input-group textarea:-moz-placeholder {
-    font-weight: 500;
-    color: #4d5a6d; }
-  .small-input-group input.placeholder, .small-input-group textarea.placeholder {
-    font-weight: 500;
-    color: #4d5a6d; }
-
-.medium-input-group.md-input-has-placeholder input::-webkit-input-placeholder {
-  font-weight: 500;
-  color: #92969c; }
-
-.medium-input-group.md-input-has-placeholder input:-moz-placeholder {
-  font-weight: 500;
-  color: #92969c; }
-
-.medium-input-group.md-input-has-placeholder input.placeholder {
-  font-weight: 500;
-  color: #92969c; }
-
-.medium-input-group.md-input-has-placeholder textarea::-webkit-input-placeholder {
-  font-weight: 500;
-  color: #92969c; }
-
-.medium-input-group.md-input-has-placeholder textarea:-moz-placeholder {
-  font-weight: 500;
-  color: #92969c; }
-
-.medium-input-group.md-input-has-placeholder textarea.placeholder {
-  font-weight: 500;
-  color: #92969c; }
-
-.medium-input-group label {
-  color: #4d5a6d;
-  font-size: 12.5px;
-  font-weight: 500; }
-
-.medium-input-group input, .medium-input-group textarea {
-  font-size: 17.5px;
-  color: #92969c;
-  font-weight: 500; }
-  .medium-input-group input::-webkit-input-placeholder, .medium-input-group textarea::-webkit-input-placeholder {
-    font-weight: 500;
-    color: #4d5a6d; }
-  .medium-input-group input:-moz-placeholder, .medium-input-group textarea:-moz-placeholder {
-    font-weight: 500;
-    color: #4d5a6d; }
-  .medium-input-group input.placeholder, .medium-input-group textarea.placeholder {
-    font-weight: 500;
-    color: #4d5a6d; }
-
 .blue-bg-btn, .dark-bg-btn, .orange-bg-btn, .red-bg-btn {
   font-size: 12.5px;
   padding: 0 30px; }
@@ -208,8 +122,3 @@ h1, h2, h3, h4, h5, h6, p {
   font-size: 10px;
   color: #f07575;
   margin-top: 3px; }
-
-.user-image {
-  border-radius: 50%;
-  width: 30px;
-  height: 30px; }

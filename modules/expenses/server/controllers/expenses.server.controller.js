@@ -13,12 +13,31 @@ var path = require('path'),
  */
 exports.create = function(req, res) {
 	var expense = new Expense(req.body);
-	expense.user_id = req.user.id;
+
+	expense.attributes.user_id = req.user.attributes.id;
 
 	expense.save().then(function(savedExpense) {
-		res.json(savedExpense);		
+		
+
+    if(expense.attributes.type === 'expense') {
+      req.user.attributes.balance -= expense.attributes.amount;
+    }
+    else if(expense.attributes.type === 'income') {
+      req.user.attributes.balance += expense.attributes.amount;
+    }
+
+    req.user.save({ patch: true }).then(function(savedUser) {
+      res.json(savedExpense);
+    }).catch(function(err) {
+      return res.status(400).send({
+        err: err,
+        message: errorHandler.getErrorMessage(err)
+      });
+    });
 	}).catch(function(err) {
+    console.log(err);
 		return res.status(400).send({
+      err: err,
 			message: errorHandler.getErrorMessage(err)
 		});
 	});
@@ -36,7 +55,7 @@ exports.update = function(req, res) {
   var expense = req.expense;
 
   expense.title = req.body.title;
-  expense.value = req.body.value;
+  expense.amount = req.body.amount;
 
   //note(seb): setting the method explicitly to 'update' makes it so that if it fails we get a different,
   //           more accurate error message back than just 'no rows updated'
@@ -65,13 +84,14 @@ exports.delete = function(req, res) {
 exports.list = function(req, res) {
   Expenses.query({ 
     where: {
-      user_id: req.user.id
+      user_id: req.user.attributes.id
     }
   }).fetch({
-    withRelated: ['user']
+    withRelated: []
   }).then(function(loadedModels) {
     res.json(loadedModels);
   }).catch(function(err) {
+    console.log(err);
     return res.status(400).send({
       message: errorHandler.getErrorMessage(err)
     });
@@ -83,7 +103,6 @@ exports.expenseById = function(req, res, next, id) {
   new Expense({ id: id })
     .fetch()
     .then(function(loadedExpense) {
-
       if(!loadedExpense) {
         return res.status(404).send({
           message: 'No article with that identifier has been found'

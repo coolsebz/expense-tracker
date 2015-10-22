@@ -1,0 +1,44 @@
+@import "../../../core/client/scss/partials/variables";
+@import "../../../core/client/scss/partials/mixins";
+@import "../../../core/client/scss/partials/placeholders";
+
+.full-view {
+	width: 100vw;
+	height: 100vh;
+	align-content: center;
+	align-items: center;
+	justify-content: center;
+
+	> article {
+		max-width: 30%;
+	}
+}
+
+.expense-card {
+	padding: 2em;
+	margin: 30px auto;
+	position: relative;
+	
+	h2 {
+		margin-bottom: 10px;
+
+		&:before {
+			content: '';
+			display: block;
+			width: 100%;
+			height: 17px;
+			position: absolute;
+			top: 0;
+			left: 0;
+		}
+
+		&.charm-expense:before {
+			background-color: $red;
+		}
+
+		&.charm-income:before {
+			background-color: $light_green;
+		}
+	}
+}
+
