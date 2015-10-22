@@ -15,6 +15,7 @@ angular.module('expenses').controller('ExpensesController', ['$scope', '$statePa
       $scope.amount = 0;
       $scope.receiptDate = new Date();
       $scope.type = false; //signaling that this is an expense by default
+      $scope.category = '';
     };
 
     // Create new expense
@@ -26,7 +27,8 @@ angular.module('expenses').controller('ExpensesController', ['$scope', '$statePa
         title: $scope.title,
         amount: $scope.amount,
         receipt_date: $scope.receiptDate,
-        type: $scope.type ? 'income' : 'expense'
+        type: $scope.type ? 'income' : 'expense',
+        category: $scope.category
       });
 
       // Redirect after save
@@ -46,6 +48,10 @@ angular.module('expenses').controller('ExpensesController', ['$scope', '$statePa
           $scope.authentication.user.balance += response.amount;
         }
 
+        if(!$scope.authentication.user.expenses) {
+          $scope.authentication.user.expenses = [];
+        }
+        
         $scope.authentication.user.expenses.push(response);
       }, function (errorResponse) {
         $scope.error = errorResponse.data.message;

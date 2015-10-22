@@ -1,9 +1,14 @@
 <section ng-controller="HomeController" flex layout="column" layout-aligm="center center" class="full-view">
   
-  <article>
-  	<h1>Some stats about your expenses:</h1>
-  	<canvas id="line" class="chart chart-line" chart-data="data" chart-labels="labels" 
-  	    chart-legend="true" chart-series="series" chart-click="onClick"></canvas> 
-  	
+  <article ng-show="authentication.user.expenses.length === 0">
+    <h1>You don't have any expenses yet.</h1>
+    <h1>Go create one</h1>
+  </article>
+
+  <article ng-show="authentication.user.expenses.length !== 0">
+    <h1>Some stats about your expenses:</h1>
+    <canvas id="line" class="chart chart-line" chart-data="data" chart-labels="labels" 
+        chart-legend="true" chart-series="series" chart-click="onClick"></canvas> 
+    
   </article>
 </section>

@@ -40,6 +40,7 @@ var config = require('../config'),
   //   table.string('title').nullable();
   //   table.float('amount').notNullable();
   //   table.string('type').notNullable();
+  //   table.string('category').notNullable();
   //   table.datetime('receipt_date').notNullable();
   //   table.integer('user_id').references('users.id');
   //   table.timestamps();

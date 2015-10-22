@@ -1,5 +1,5 @@
 <div class="container" ng-controller="HeaderController">
-  <md-toolbar class="menu-bar" flex layout="row">
+  <md-toolbar ng-if="authentication.user" class="menu-bar" flex layout="row">
       <div ui-sref="home">CHARTS</div>
       <div ui-sref="expenses.list">EXPENSES</div>
       <div>Total balance: {{authentication.user.balance | currency: '€' }}</div>

@@ -9,16 +9,20 @@ angular.module('core').controller('HomeController', ['$scope', 'Authentication',
     	$state.go('authentication.signin');
     }
 
-    var stats = extractLabels($scope.authentication.user.expenses);
+	
+	if($scope.authentication.user.expenses) {
 
-    $scope.labels = stats.labels;
-    $scope.series = ['Expenses', 'Income'];
+	    var stats = extractLabels($scope.authentication.user.expenses);
 
+	    $scope.labels = stats.labels;
+	    $scope.series = ['Expenses', 'Income'];
 
-    $scope.data = [
-      stats.expenseSeries,
-      stats.incomeSeries
-    ];
+	    $scope.data = [
+	      stats.expenseSeries,
+	      stats.incomeSeries
+	    ];
+	}    
+
     $scope.onClick = function (points, evt) {
       console.log(points, evt);
     };
