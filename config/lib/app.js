@@ -51,7 +51,7 @@ module.exports.start = function start(callback) {
       }
       console.log(chalk.green('App version:\t\t\t' + config.meanjs.version));
       if (config.meanjs['meanjs-version'])
-        console.log(chalk.green('MEAN.JS version:\t\t\t' + config.meanjs['meanjs-version']));
+        console.log(chalk.green('Expense Tracker version:\t\t\t' + config.meanjs['meanjs-version']));
       console.log('--');
 
       if (callback) callback(app, db, config);
