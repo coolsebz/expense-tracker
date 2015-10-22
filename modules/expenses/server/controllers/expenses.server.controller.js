@@ -3,6 +3,8 @@
 var path = require('path'),
   User = require(path.resolve('./modules/users/server/models/user.server.model')),
   Users = require(path.resolve('./modules/users/server/collections/user.server.collection')),
+  Expense = require(path.resolve('./modules/expenses/server/models/expense.server.model')),
+  Expenses = require(path.resolve('./modules/expenses/server/collections/expense.server.collection')),
   errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller'));
 
 
@@ -17,7 +19,7 @@ exports.create = function(req, res) {
 		res.json(savedExpense);		
 	}).catch(function(err) {
 		return res.status(400).send({
-			message: errorHandler.getErrorMessage(err);
+			message: errorHandler.getErrorMessage(err)
 		});
 	});
 };
@@ -42,23 +44,57 @@ exports.update = function(req, res) {
     res.json(savedExpense);
   }).catch(function(err) {
     return res.status(400).send({
-      message: errorhandler.getErrorMessage(err);
-    })
+      message: errorhandler.getErrorMessage(err)
+    });
   });
 
 };
 
 exports.delete = function(req, res) {
+  var expense = req.expense;
 
+  expense.destroy().then(function(deletedExpense) {
+    res.json(deletedExpense);
+  }).catch(function(err) {
+    return res.status(400).send({
+      message: errorhandler.getErrorMessage(err)
+    });
+  });
 };
 
 exports.list = function(req, res) {
-
+  new Expenses.query({ 
+    where: {
+      user_id: req.user.id
+    }
+  }).fetch({
+    withRelated: ['user']
+  }).then(function(loadedModels) {
+    res.json(loadedModels);
+  }).catch(function(err) {
+    return res.status(400).send({
+      message: errorHandler.getErrorMessage(err)
+    });
+  });
 };
 
 exports.expenseById = function(req, res, next, id) {
 
+  new Expense({ id: id })
+    .fetch()
+    .then(function(loadedExpense) {
 
+      if(!loadedExpense) {
+        return res.status(404).send({
+          message: 'No article with that identifier has been found'
+        });  
+      }
+
+      req.expense = loadedExpense;
+      return next();
+    }).catch(function(err) {
+      return next(err);
+    });
 
 
 };
