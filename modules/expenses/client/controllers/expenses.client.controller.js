@@ -1,8 +1,8 @@
 'use strict';
 
 // Expenses controller
-angular.module('expenses').controller('ExpensesController', ['$scope', '$stateParams', '$location', '$state', 'Authentication', 'Expenses', 'Categories',
-  function ($scope, $stateParams, $location, $state, Authentication, Expenses, Categories) {
+angular.module('expenses').controller('ExpensesController', ['$scope', '$stateParams', '$location', '$state', '$http', 'Authentication', 'Expenses', 'Categories',
+  function ($scope, $stateParams, $location, $state, $http, Authentication, Expenses, Categories) {
     $scope.authentication = Authentication;
 
     if(!$scope.authentication.user) {
@@ -16,6 +16,7 @@ angular.module('expenses').controller('ExpensesController', ['$scope', '$statePa
       $scope.receiptDate = new Date();
       $scope.type = false; //signaling that this is an expense by default
       $scope.category = '';
+      $scope.selectedContacts = [];
     };
 
     // Create new expense
@@ -35,6 +36,10 @@ angular.module('expenses').controller('ExpensesController', ['$scope', '$statePa
         if(savedCategory.id || $scope.category) {
           console.log('setting the category to: ', savedCategory.id || $scope.category);
           expense.category_id = savedCategory.id || $scope.category; //note(seb): making sure that the property doesn't get sent with an empty value
+        }
+
+        if($scope.selectedContacts.length) {
+          expense.selectedContacts = $scope.selectedContacts;
         }
 
         // Redirect after save
@@ -63,8 +68,6 @@ angular.module('expenses').controller('ExpensesController', ['$scope', '$statePa
         });
 
       });
-
-      
     };
 
     function handleNewCategory(newCategoryName, next) {
@@ -89,6 +92,22 @@ angular.module('expenses').controller('ExpensesController', ['$scope', '$statePa
         next({});
       });
     }
+
+    // Search for the right contacts
+    $scope.contactSearch = function($query) {
+      if(!$query) {
+        return;
+      }
+
+      // note(seb):
+      // this is very crude, i just wanted to sketch this out, I know that the right way to do it would be via a Service
+      // not direct HTTP calls (not to mention directly passing the $query without checking anything about it)
+      return $http.get('/api/users?email=' + $query).then(function(success) {
+        return success.data;
+      }, function(error) {
+        return [];
+      });
+    };
 
     // Remove existing expense
     $scope.remove = function (expense) {
@@ -120,9 +139,15 @@ angular.module('expenses').controller('ExpensesController', ['$scope', '$statePa
       });
     };
 
+    // Set the active category filter
+    $scope.filterByCategory = function(category) {
+      $scope.activeCategory = category;
+      $scope.find();
+    };
+
     // Find a list of Expenses
     $scope.find = function () {
-      $scope.expenses = Expenses.query();
+      $scope.expenses = Expenses.query($scope.activeCategory ? { categoryId: $scope.activeCategory.id } : {});
     };
 
     // Find existing expense

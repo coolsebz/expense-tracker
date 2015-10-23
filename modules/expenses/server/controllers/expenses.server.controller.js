@@ -14,14 +14,18 @@ var path = require('path'),
  * Create a new expense
  */
 exports.create = function(req, res) {
-	var expense = new Expense(req.body);
+  var selectedContacts = req.body.selectedContacts;
+  delete req.body.selectedContacts;
 
+	var expense = new Expense(req.body);
 	expense.attributes.user_id = req.user.attributes.id;
 
 	expense.save().then(function(savedExpense) {
 
-
-    // savedExpense.shared_users().attach(); 
+    //note(seb): tad bit slower than a classic for but a lot easier to read
+    selectedContacts.map(function(contact) {
+      savedExpense.shared_users().attach(contact.id);
+    });
 
     if(expense.attributes.type === 'expense') {
       req.user.attributes.balance -= expense.attributes.amount;
@@ -30,10 +34,10 @@ exports.create = function(req, res) {
       req.user.attributes.balance += expense.attributes.amount;
     }
 
+    //todo(seb): ask about formula for updating the balance of shared contacts
     req.user.save(null, { method: 'update' }).then(function(savedUser) {
       res.json(savedExpense);
     }).catch(function(err) {
-      console.log('user save: ', err);
       return res.status(400).send({
         err: err,
         message: errorHandler.getErrorMessage(err)
@@ -92,10 +96,20 @@ exports.list = function(req, res) {
     return [];
   }
 
+  var whereQuery = {
+    user_id: req.user.attributes.id
+  };
+
+  if(req.query.categoryId) {
+    whereQuery.category_id = req.query.categoryId;
+  }
+  else if(req.query.category) {
+    //todo(seb): build the loading of categories as word parameters
+    //           should do a lookup based on the name of the category instead of its ID
+  }
+
   Expenses.query({ 
-    where: {
-      user_id: req.user.attributes.id
-    }
+    where: whereQuery
   }).fetch({
     withRelated: ['category', 'shared_users']
   }).then(function(loadedModels) {
