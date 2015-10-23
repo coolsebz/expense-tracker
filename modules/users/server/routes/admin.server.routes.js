@@ -11,15 +11,17 @@ module.exports = function (app) {
   require('./users.server.routes.js')(app);
 
   // Users collection routes
-  app.route('/api/users')
-    .get(adminPolicy.isAllowed, admin.list);
+
+  // note(seb): disabled the admin 'get user' route for this version because we're using an user route with an email query string for fetching
+  // app.route('/api/users')
+  //   .get(adminPolicy.isAllowed, admin.list);
 
   // Single user routes
-  app.route('/api/users/:userId')
-    .get(adminPolicy.isAllowed, admin.read)
-    .put(adminPolicy.isAllowed, admin.update)
-    .delete(adminPolicy.isAllowed, admin.delete);
+  // app.route('/api/users/:userId')
+  //   .get(adminPolicy.isAllowed, admin.read)
+  //   .put(adminPolicy.isAllowed, admin.update)
+  //   .delete(adminPolicy.isAllowed, admin.delete);
 
   // Finish by binding the user middleware
-  app.param('userId', admin.userByID);
+  // app.param('userId', admin.userById);
 };

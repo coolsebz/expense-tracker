@@ -19,7 +19,9 @@ exports.create = function(req, res) {
 	expense.attributes.user_id = req.user.attributes.id;
 
 	expense.save().then(function(savedExpense) {
-    savedExpense.shared_users().attach(req.user.attributes.id);
+
+
+    // savedExpense.shared_users().attach(); 
 
     if(expense.attributes.type === 'expense') {
       req.user.attributes.balance -= expense.attributes.amount;
@@ -95,7 +97,7 @@ exports.list = function(req, res) {
       user_id: req.user.attributes.id
     }
   }).fetch({
-    withRelated: []
+    withRelated: ['category', 'shared_users']
   }).then(function(loadedModels) {
     res.json(loadedModels);
   }).catch(function(err) {

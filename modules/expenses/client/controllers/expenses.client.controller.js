@@ -22,8 +22,6 @@ angular.module('expenses').controller('ExpensesController', ['$scope', '$statePa
     $scope.create = function (isValid) {
       $scope.error = null;
 
-      console.log($scope.category);
-
       handleNewCategory($scope.newCategory, function(savedCategory) {
 
         // Create new expense object
@@ -32,8 +30,12 @@ angular.module('expenses').controller('ExpensesController', ['$scope', '$statePa
           amount: $scope.amount,
           receipt_date: $scope.receiptDate,
           type: $scope.type ? 'income' : 'expense',
-          category_id: savedCategory.id || $scope.category
         });
+
+        if(savedCategory.id || $scope.category) {
+          console.log('setting the category to: ', savedCategory.id || $scope.category);
+          expense.category_id = savedCategory.id || $scope.category; //note(seb): making sure that the property doesn't get sent with an empty value
+        }
 
         // Redirect after save
         expense.$save(function (response) {
