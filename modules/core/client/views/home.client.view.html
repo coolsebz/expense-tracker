@@ -5,10 +5,65 @@
     <h1>Go create one</h1>
   </article>
 
-  <article ng-show="authentication.user.expenses.length !== 0">
-    <h1>Some stats about your expenses:</h1>
-    <canvas id="line" class="chart chart-line" chart-data="data" chart-labels="labels" 
-        chart-legend="true" chart-series="series" chart-click="onClick"></canvas> 
-    
+  <article ng-show="authentication.user.expenses.length !== 0" flex layout-align="start center" layout="row" class="stats-article">
+  	<div>
+		<ul>
+			<!-- Week -->
+  			<li ng-repeat="(weekName, weekDetails) in weeklyDetailedData">
+  				{{weekName}}:
+  				<ul>
+  					<!-- Category -->
+  					<li ng-repeat="(categoryName, categoryValues) in weekDetails.categories">
+  						<h5>{{categoryName}}</h5>
+  						<h6>Expense: <span class="red-text">{{categoryValues[0] | currency: '€' }}</span></h6>
+  						<h6>Income: <span class="green-text">{{categoryValues[1] | currency: '€' }}</span></h6>
+  					</li>
+
+  				</ul>
+  			</li>
+  		</ul>
+  	</div>
+
+  	<div>
+	    <h4>Income & Expense per Day:</h4>
+	    <canvas class="chart chart-line" chart-data="dailyData.values" chart-labels="dailyData.labels" 
+	        chart-legend="true" chart-series="dailyData.series">
+	    </canvas> 
+    </div>
+
+    <div>
+	    <h4>Income & Expense per Category:</h4>
+	    <canvas class="chart chart-radar" chart-data="categoryData.values" chart-labels="categoryData.labels" 
+	        chart-legend="true" chart-series="categoryData.series">
+	    </canvas> 
+    </div>
+
+    <div>
+	    <h4>Expense per Category:</h4>
+	    <canvas class="chart chart-pie" chart-data="categoryData.values[0]" chart-labels="categoryData.labels" 
+	        chart-legend="true" chart-series="categoryData.series[0]">
+	    </canvas> 
+    </div>
+
+    <div>
+	    <h4>Income per Category:</h4>
+	    <canvas class="chart chart-pie" chart-data="categoryData.values[1]" chart-labels="categoryData.labels" 
+	        chart-legend="true" chart-series="categoryData.series[1]">
+	    </canvas> 
+    </div>
+
+    <div>
+	    <h4>Income / Expense per Week:</h4>
+	    <canvas class="chart chart-line" chart-data="weeklyData.values" chart-labels="weeklyData.labels" 
+	        chart-legend="true" chart-series="weeklyData.series">
+	    </canvas> 
+    </div>
+
+    <div>
+	    <h4>Income / Expense per Week:</h4>
+	    <canvas class="chart chart-bar" chart-data="sharedData.values" chart-labels="sharedData.labels" 
+	        chart-legend="true" chart-series="sharedData.series">
+	    </canvas> 
+    </div>
   </article>
 </section>

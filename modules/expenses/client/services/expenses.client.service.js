@@ -4,7 +4,7 @@
 angular.module('expenses').factory('Expenses', ['$resource',
   function ($resource) {
     return $resource('api/expenses/:expenseId', {
-      expenseId: '@_id'
+      expenseId: '@id'
     }, {
       update: {
         method: 'PUT'
@@ -12,6 +12,10 @@ angular.module('expenses').factory('Expenses', ['$resource',
       query: {
       	isArray: true,
       	method: 'GET'
+      },
+      stats: {
+        url: 'api/stats/expenses',
+        method: 'GET'
       }
     });
   }

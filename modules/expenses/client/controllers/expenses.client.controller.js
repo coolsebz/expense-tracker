@@ -127,16 +127,17 @@ angular.module('expenses').controller('ExpensesController', ['$scope', '$statePa
     };
 
     // Update existing expense
-    $scope.update = function (isValid) {
+    $scope.update = function (expense, newCategory) {
       $scope.error = null;
 
-      var expense = $scope.expense;
+      expense.category_id = newCategory.id;
+      expense.category = newCategory;
 
-      expense.$update(function () {
-        $location.path('expenses/' + expense._id);
-      }, function (errorResponse) {
-        $scope.error = errorResponse.data.message;
+      //todo(seb): add more error handling for this
+      expense.$update(function(response) {
+        $scope.find();  
       });
+
     };
 
     // Set the active category filter
@@ -161,6 +162,11 @@ angular.module('expenses').controller('ExpensesController', ['$scope', '$statePa
       $scope.expense = Expenses.get({
         expenseId: $stateParams.expenseId
       });
+    };
+
+    // Open 'Change category' menu
+    $scope.openCategoriesMenu = function($mdOpenMenu, ev) {
+      $mdOpenMenu(ev);
     };
   }
 ]);

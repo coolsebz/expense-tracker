@@ -18,6 +18,16 @@ module.exports = function (app) {
     .put(expenses.update)
     .delete(expenses.delete);
 
+
+  //supports the following
+  //   /stats/expenses?perCategory=true
+  //   /stats/expenses?daily=true
+  //   /stats/expenses?sharedExpenses=true
+  //   /stats/expenses?weekly=true
+  //   /stats/expenses?weeklyDetailed=true
+  app.route('/api/stats/expenses')
+    .get(expenses.stats);
+
   // Finish by binding the article middleware
   app.param('expenseId', expenses.expenseById);
 };

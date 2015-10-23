@@ -10,6 +10,17 @@
 
         <md-card class="expense-card" ng-repeat="expense in expenses">
 
+	        <md-menu>
+	        	<h5 ng-click="openCategoriesMenu($mdOpenMenu, $event)">Change category</h5>
+		        <md-menu-content width="6">
+		          <md-menu-item ng-repeat="category in authentication.user.categories">
+		            <md-button ng-click="update(expense, category)">
+		              {{category.name}}
+		            </md-button>
+		          </md-menu-item>
+		        </md-menu-content>
+		      </md-menu>
+
           <h2 ng-class="{ 'charm-expense': (expense.type === 'expense'), 'charm-income': (expense.type === 'income') }">{{expense.title}}</h2>
           <h3>Amount: {{expense.amount | currency: '€'}}</h3>
 

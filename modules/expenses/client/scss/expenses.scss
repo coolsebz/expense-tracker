@@ -10,6 +10,27 @@
 
 	> article {
 		max-width: 30%;
+		padding-top: 117px;
+
+		&.stats-article {
+			min-width: 80%;
+			justify-content: space-around;
+			flex-wrap: wrap;
+
+			div {
+				margin-top: 20px;
+			}
+
+			h4 {
+				text-align: center;
+				margin-bottom: 10px;
+			}
+
+			canvas {
+				width: 400px;
+				height: 300px;
+			}
+		}
 	}
 }
 
@@ -31,6 +52,14 @@
 	padding: 2em;
 	margin: 30px auto;
 	position: relative;
+
+	h5 {
+		position: absolute;
+		top: 17px;
+		right: 10px;
+		text-transform: uppercase;
+		cursor: pointer;
+	}
 	
 	h2 {
 		margin-bottom: 10px;
@@ -55,3 +84,10 @@
 	}
 }
 
+.red-text {
+	color: $red;
+}
+
+.green-text {
+	color: $light_green;
+}

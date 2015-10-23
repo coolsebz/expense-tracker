@@ -22,14 +22,14 @@
       <span ng-show="type === true">Income</span>
     </md-switch>
 
-    <md-input-container>
+    <md-input-container ng-hide="!authentication.user.categories">
       <label>Pick a category</label>
       <md-select name="category" ng-model="category">
         <md-option ng-repeat="category in authentication.user.categories" value="{{category.id}}">{{category.name}}</md-option>
       </md-select>
     </md-input-container>
 
-    or
+    <p ng-hide="!authentication.user.categories">or</p>
 
     <md-input-container>
       <label>Type a new category name here</label>
