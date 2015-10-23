@@ -1,17 +1,27 @@
-<section ng-controller="ExpensesController" ng-init="find()" flex layout="row" layout-aligm="end end" class="full-view">
+<section ng-controller="ExpensesController" ng-init="loadInitialData()" flex layout="row" layout-align="end end" class="full-view">
 
-<div>
-  <h1>Here are your expenses</h1>
+<md-tabs md-selected="selectedCategoryIndex" class="category-tabs" flex="grow" md-border-bottom md-autoselect>
+  <md-tab ng-repeat="category in categoryTabs"
+          label="{{category.name}}"
+          ng-click="filterByCategory(category)">
+    <div>
+      <div>
+        <h1>Here are your expenses</h1>
 
-  <md-card class="expense-card" ng-repeat="expense in expenses">
+        <md-card class="expense-card" ng-repeat="expense in expenses">
 
-    <h2 ng-class="{ 'charm-expense': (expense.type === 'expense'), 'charm-income': (expense.type === 'income') }">{{expense.title}}</h2>
-    <h3>Amount: {{expense.amount | currency: '€'}}</h3>
+          <h2 ng-class="{ 'charm-expense': (expense.type === 'expense'), 'charm-income': (expense.type === 'income') }">{{expense.title}}</h2>
+          <h3>Amount: {{expense.amount | currency: '€'}}</h3>
 
-    <h3>Category: {{expense.category.name}}</h3>
-    <h4>From: {{expense.receipt_date | date: 'longDate'}}</h4>
+          <h3>Category: {{expense.category.name}}</h3>
+          <h4>From: {{expense.receipt_date | date: 'longDate'}}</h4>
 
-  </md-card>
-</div>
+        </md-card>
+      </div>
+    </div>
+  </md-tab>
+</md-tabs>
+
+
 
 </section>

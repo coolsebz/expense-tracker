@@ -13,6 +13,20 @@
 	}
 }
 
+.category-tabs {
+	width: 100%;
+	min-height: 100vh !important;
+	padding-top: 68px;
+
+	.expense-card {
+		width: 70%;
+	}
+
+	md-tabs[md-border-bottom]:not(.md-dynamic-height) md-tabs-content-wrapper, md-tabs-content-wrapper {
+		top: 117px !important;
+	}
+}
+
 .expense-card {
 	padding: 2em;
 	margin: 30px auto;

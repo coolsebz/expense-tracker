@@ -147,7 +147,13 @@ angular.module('expenses').controller('ExpensesController', ['$scope', '$statePa
 
     // Find a list of Expenses
     $scope.find = function () {
-      $scope.expenses = Expenses.query($scope.activeCategory ? { categoryId: $scope.activeCategory.id } : {});
+      $scope.expenses = Expenses.query($scope.activeCategory.id ? { categoryId: $scope.activeCategory.id } : {});
+    };
+
+    $scope.loadInitialData = function() {
+      $scope.categoryTabs = [{ name: 'All', }].concat($scope.authentication.user.categories); //build all available tabs
+      $scope.activeCategory = $scope.categoryTabs[0]; //initialize with the All tab
+      $scope.find();
     };
 
     // Find existing expense

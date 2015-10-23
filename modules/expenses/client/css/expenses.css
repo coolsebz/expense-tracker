@@ -32,6 +32,15 @@
   .full-view > article {
     max-width: 30%; }
 
+.category-tabs {
+  width: 100%;
+  min-height: 100vh !important;
+  padding-top: 68px; }
+  .category-tabs .expense-card {
+    width: 70%; }
+  .category-tabs md-tabs[md-border-bottom]:not(.md-dynamic-height) md-tabs-content-wrapper, .category-tabs md-tabs-content-wrapper {
+    top: 117px !important; }
+
 .expense-card {
   padding: 2em;
   margin: 30px auto;
