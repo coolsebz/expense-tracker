@@ -2,6 +2,7 @@
 
 var path = require('path'),
   _ = require('lodash'),
+  async = require('async'),
   User = require(path.resolve('./modules/users/server/models/user.server.model')),
   Users = require(path.resolve('./modules/users/server/collections/user.server.collection')),
   Expense = require(path.resolve('./modules/expenses/server/models/expense.server.model')),
@@ -145,160 +146,112 @@ exports.expenseById = function(req, res, next, id) {
     });
 };
 
+// note(seb): these are the new comparators, used instead of "hardcoding" the comparasion conditions inside the map
+//            and having it be binded inside of that scope, making it hard to pass as a function
+var dailyStatComparator = function(expense, callback) {
+  expense = expense.toJSON();
+  if(expense.type === 'income') {
+    callback(null, { key: new Date(expense.receipt_date).getDate() + '/' + new Date(expense.receipt_date).getMonth(), daily_value: [0, expense.amount] });
+  }
+  else if(expense.type === 'expense') {
+    callback(null, { key: new Date(expense.receipt_date).getDate() + '/' + new Date(expense.receipt_date).getMonth(), daily_value: [expense.amount, 0] });
+  }
+};
+
+var categoryStatComparator = function(expense, callback) {
+  expense = expense.toJSON();
+  if(expense.type === 'income') {
+    callback(null, { key: expense.category_id ? expense.category.name : 'Uncathegorized', daily_value: [0, expense.amount] });
+  }
+  else if(expense.type === 'expense') {
+    callback(null, { key: expense.category_id ? expense.category.name : 'Uncathegorized', daily_value: [expense.amount, 0] });
+  }
+};
+
+var weeklyStatComparator = function(expense, callback) {
+  expense = expense.toJSON();
+  if(expense.type === 'income') {
+    callback(null, { key: 'Week #' + getWeekNumber(new Date(expense.receipt_date)), daily_value: [0, expense.amount] });
+  }
+  else if(expense.type === 'expense') {
+    callback(null, { key: 'Week #' + getWeekNumber(new Date(expense.receipt_date)), daily_value: [expense.amount, 0] });
+  }
+};
+
+var sharedStatComparator = function(expense, callback) {
+  expense = expense.toJSON();
+  if(expense.type === 'income') {
+    callback(null, { key: expense.shared_users.length > 0 ? 'Shared' : 'Personal', daily_value: [0, expense.amount] });
+  }
+  else if(expense.type === 'expense') {
+    callback(null, { key: expense.shared_users.length > 0 ? 'Shared' : 'Personal', daily_value: [expense.amount, 0] });
+  }
+};
+
+// note(seb): this is the more functional-like approach to parallelized map-reduce, as an alternative to the old version
+//            i like this version a lot better since it's a bit more concise and also parallelized out of the box
+// todo(seb): add error handling
+function getStats(expenses, comparator, done) {
+  async.map(expenses, comparator, function(err, results) { // this runs parallel, and once it's done, the callback brings back all the results
+    async.reduce(results, { labels: [], values: [ [], [] ], series: ['Expenses', 'Incomes'] }, function(result, expense, next) { // and then this runs parallel too
+
+      if(result.labels.indexOf(expense.key) !== -1) {
+        result.values[0][result.labels.indexOf(expense.key)] += expense.daily_value[0];
+        result.values[1][result.labels.indexOf(expense.key)] += expense.daily_value[1];
+      }
+      else {
+        result.labels.push(expense.key);
+        result.values[0][result.labels.indexOf(expense.key)] = expense.daily_value[0];
+        result.values[1][result.labels.indexOf(expense.key)] = expense.daily_value[1];
+      }
+      
+      next(null, result);
+    }, function(err, result) { // and once the reduce phase is done, we can send back the result
+      done(err, result);
+    });
+  });
+}
+
 exports.stats = function(req, res) {
 
   Expenses.query({
-    where: {
-      user_id: req.user.attributes.id
-    }
+    where: { user_id: req.user.attributes.id }
   }).fetch({
     withRelated: ['category', 'shared_users']
   }).then(function(loadedExpenses) {
 
       if(req.query.daily) {
-        return res.json(dailyStats(loadedExpenses));
+        return getStats(loadedExpenses.models, dailyStatComparator, function(err, result) {
+          return res.json(result);
+        });
       }
       else if(req.query.perCategory) {
-        return res.json(categoryStats(loadedExpenses));
+        return getStats(loadedExpenses.models, categoryStatComparator, function(err, result) {
+          return res.json(result);
+        });
       }
       else if(req.query.weekly) {
-        return res.json(weeklyStats(loadedExpenses));
+        return getStats(loadedExpenses.models, weeklyStatComparator, function(err, result) {
+          return res.json(result);
+        });
       }
       else if(req.query.weeklyDetailed) {
         return res.json(weeklyDetailedStats(loadedExpenses));
       }
       else if(req.query.sharedExpenses) {
-        return res.json(sharedStats(loadedExpenses));
+        return getStats(loadedExpenses.models, sharedStatComparator, function(err, result) {
+          return res.json(result);
+        });
       }
   }).catch(function(err) {
+    console.log(err);
     return res.status(400).send({
       message: errorHandler.getErrorMessage(err)
     });
   });
 };
 
-function dailyStats(expenses) {
-  return _.chain(expenses.models)
-  .map(function(expense) { 
-
-    //note(seb): here we transform the original model into something closer to the end result
-    // for example, we combine the expense type with the nested array requirement for the graph data
-    // and based on the expense type we create an array of the form [ expense_value, income_value ]
-    
-    if(expense.attributes.type === 'income') {
-      return { receipt_date: new Date(expense.attributes.receipt_date).getDate() + '/' + new Date(expense.attributes.receipt_date).getMonth(), daily_value: [0, expense.attributes.amount] };
-    }
-    else if(expense.attributes.type === 'expense') {
-      return { receipt_date: new Date(expense.attributes.receipt_date).getDate() + '/' + new Date(expense.attributes.receipt_date).getMonth(), daily_value: [expense.attributes.amount, 0] };
-    }
-  })
-  .reduce(function(result, expense) {
-  
-    //note(seb): now that we have a better model, we can start working with the reduce function
-    // combining the receipt date with the nested array for the final version of the chart data
-  
-    if(result.labels.indexOf(expense.receipt_date) !== -1) {
-      result.values[0][result.labels.indexOf(expense.receipt_date)] += expense.daily_value[0];
-      result.values[1][result.labels.indexOf(expense.receipt_date)] += expense.daily_value[1];
-    }
-    else {
-      result.labels.push(expense.receipt_date);
-      result.values[0][result.labels.indexOf(expense.receipt_date)] = expense.daily_value[0];
-      result.values[1][result.labels.indexOf(expense.receipt_date)] = expense.daily_value[1];
-    }
-    
-    return result;
-
-  }, { labels: [], values: [ [], [] ], series: ['Expenses', 'Incomes'] }).value();
-}
-
-function categoryStats(expenses) {
-  return _.chain(expenses.models)
-  .map(function(expense) { 
-    //note(seb): here we transform the original model into something closer to the end result
-    // for example, we combine the expense type with the nested array requirement for the graph data
-    // and based on the expense type we create an array of the form [ expense_value, income_value ]
-
-    expense = expense.toJSON(); // quick way to make bookshelf resolve all other nested relations
-
-    if(expense.type === 'income') {
-      return { category: expense.category_id ? expense.category.name : 'Uncathegorized', daily_value: [0, expense.amount] };
-    }
-    else if(expense.type === 'expense') {
-      return { category: expense.category_id ? expense.category.name : 'Uncathegorized', daily_value: [expense.amount, 0] };
-    }
-  })
-  .reduce(function(result, expense) {
-  
-    //note(seb): now that we have a better model, we can start working with the reduce function
-    // combining the receipt date with the nested array for the final version of the chart data
-  
-    if(result.labels.indexOf(expense.category) !== -1) {
-      result.values[0][result.labels.indexOf(expense.category)] += expense.daily_value[0];
-      result.values[1][result.labels.indexOf(expense.category)] += expense.daily_value[1];
-    }
-    else {
-      result.labels.push(expense.category);
-      result.values[0][result.labels.indexOf(expense.category)] = expense.daily_value[0];
-      result.values[1][result.labels.indexOf(expense.category)] = expense.daily_value[1];
-    }
-    
-    return result;
-
-  }, { labels: [], values: [ [], [] ], series: ['Expenses', 'Incomes'] }).value();
-}
-
-function getWeekNumber(d) {
-    // Copy date so don't modify original
-    d = new Date(+d);
-    d.setHours(0,0,0);
-    // Set to nearest Thursday: current date + 4 - current day number
-    // Make Sunday's day number 7
-    d.setDate(d.getDate() + 4 - (d.getDay()||7));
-    // Get first day of year
-    var yearStart = new Date(d.getFullYear(),0,1);
-    // Calculate full weeks to nearest Thursday
-    var weekNo = Math.ceil(( ( (d - yearStart) / 86400000) + 1)/7);
-    // Return array of year and week number
-    return [weekNo, d.getFullYear()];
-}
-
-function weeklyStats(expenses) {
-  return _.chain(expenses.models)
-  .map(function(expense) { 
-    //note(seb): here we transform the original model into something closer to the end result
-    // for example, we combine the expense type with the nested array requirement for the graph data
-    // and based on the expense type we create an array of the form [ expense_value, income_value ]
-
-    expense = expense.toJSON(); // quick way to make bookshelf resolve all other nested relations
-
-    if(expense.type === 'income') {
-      return { category: 'Week #' + getWeekNumber(new Date(expense.receipt_date)), daily_value: [0, expense.amount] };
-    }
-    else if(expense.type === 'expense') {
-      return { category: 'Week #' + getWeekNumber(new Date(expense.receipt_date)), daily_value: [expense.amount, 0] };
-    }
-  })
-  .reduce(function(result, expense) {
-  
-    //note(seb): now that we have a better model, we can start working with the reduce function
-    // combining the receipt date with the nested array for the final version of the chart data
-  
-    if(result.labels.indexOf(expense.category) !== -1) {
-      result.values[0][result.labels.indexOf(expense.category)] += expense.daily_value[0];
-      result.values[1][result.labels.indexOf(expense.category)] += expense.daily_value[1];
-    }
-    else {
-      result.labels.push(expense.category);
-      result.values[0][result.labels.indexOf(expense.category)] = expense.daily_value[0];
-      result.values[1][result.labels.indexOf(expense.category)] = expense.daily_value[1];
-    }
-    
-    return result;
-
-  }, { labels: [], values: [ [], [] ], series: ['Expenses', 'Incomes'] }).value();
-}
-
+// note(seb): just for reference this is the old version. It uses chaining, one map and one reduce phase to do the same thing that we're now doing parallelized
 function weeklyDetailedStats(expenses) {
   return _.chain(expenses.models)
   .map(function(expense) { 
@@ -335,38 +288,18 @@ function weeklyDetailedStats(expenses) {
   }, {}).value();
 }
 
-function sharedStats(expenses) {
-  return _.chain(expenses.models)
-  .map(function(expense) { 
-    //note(seb): here we transform the original model into something closer to the end result
-    // for example, we combine the expense type with the nested array requirement for the graph data
-    // and based on the expense type we create an array of the form [ expense_value, income_value ]
 
-    expense = expense.toJSON(); // quick way to make bookshelf resolve all other nested relations
-
-    if(expense.type === 'income') {
-      return { category: expense.shared_users.length > 0 ? 'Shared' : 'Personal', daily_value: [0, expense.amount] };
-    }
-    else if(expense.type === 'expense') {
-      return { category: expense.shared_users.length > 0 ? 'Shared' : 'Personal', daily_value: [expense.amount, 0] };
-    }
-  })
-  .reduce(function(result, expense) {
-  
-    //note(seb): now that we have a better model, we can start working with the reduce function
-    // combining the receipt date with the nested array for the final version of the chart data
-  
-    if(result.labels.indexOf(expense.category) !== -1) {
-      result.values[0][result.labels.indexOf(expense.category)] += expense.daily_value[0];
-      result.values[1][result.labels.indexOf(expense.category)] += expense.daily_value[1];
-    }
-    else {
-      result.labels.push(expense.category);
-      result.values[0][result.labels.indexOf(expense.category)] = expense.daily_value[0];
-      result.values[1][result.labels.indexOf(expense.category)] = expense.daily_value[1];
-    }
-    
-    return result;
-
-  }, { labels: [], values: [ [], [] ], series: ['Expenses', 'Incomes'] }).value();
+function getWeekNumber(d) {
+    // Copy date so don't modify original
+    d = new Date(+d);
+    d.setHours(0,0,0);
+    // Set to nearest Thursday: current date + 4 - current day number
+    // Make Sunday's day number 7
+    d.setDate(d.getDate() + 4 - (d.getDay()||7));
+    // Get first day of year
+    var yearStart = new Date(d.getFullYear(),0,1);
+    // Calculate full weeks to nearest Thursday
+    var weekNo = Math.ceil(( ( (d - yearStart) / 86400000) + 1)/7);
+    // Return array of year and week number
+    return [weekNo, d.getFullYear()];
 }
